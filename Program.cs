@@ -7,63 +7,67 @@ namespace Lab1
 {
     class Program
     {
+        const string txtFilter = "Text Document|*.txt";
+
         [STAThread]
         static void Main(string[] args)
         {
             if (args.Length == 1 && args[0] == "-d")
-                Decript();
-            Encript();
+                Decrypt();
+            else
+                Encrypt();
         }
 
-        static void Encript()
+        static void Encrypt()
         {
-            var openDialog = new OpenFileDialog
+            using (var openDialog = new OpenFileDialog { Multiselect = false, Title = "Select file to encript", Filter = txtFilter })
             {
-                Multiselect = false,
-                Title = "Select file to encript",
-                Filter = "Text Document|*.txt"
-            };
-
-            if (openDialog.ShowDialog() == DialogResult.OK)
-            {
-                string fileName = openDialog.FileName;
-
-                using (var file = new FileStream(fileName, FileMode.Open))
-                using (var reader = new StreamReader(file))
+                if (openDialog.ShowDialog() == DialogResult.OK)
                 {
-                    var contents = reader.ReadToEnd();
-                    var encripted = EncriptText(contents);
-                    Console.WriteLine(encripted);
-                    // save file
+                    var fileName = openDialog.FileName;
+
+                    using (var file = new FileStream(fileName, FileMode.Open))
+                    using (var reader = new StreamReader(file))
+                    {
+                        var contents = reader.ReadToEnd();
+                        var encripted = EncriyptText(contents);
+                        Console.OutputEncoding = System.Text.Encoding.UTF8;
+                        Console.WriteLine(encripted);
+                        using (var saveDialog = new SaveFileDialog { Title = "Save encript file", Filter = txtFilter })
+                        {
+                            if (saveDialog.ShowDialog() == DialogResult.OK)
+                            {
+                                var fileToSaveName = saveDialog.FileName;
+                                File.WriteAllText(fileToSaveName, encripted);
+                            }
+                        }
+                    }
                 }
             }
         }
 
-        static void Decript()
+        static void Decrypt()
         {
-            var openDialog = new OpenFileDialog
+            using (var openDialog = new OpenFileDialog { Multiselect = false, Title = "Select encripted file", Filter = txtFilter })
             {
-                Multiselect = false,
-                Title = "Select encripted file",
-                Filter = "Text Document|*.txt"
-            };
-
-            if (openDialog.ShowDialog() == DialogResult.OK)
-            {
-                string fileName = openDialog.FileName;
-
-                using (var file = new FileStream(fileName, FileMode.Open))
-                using (var reader = new StreamReader(file))
+                if (openDialog.ShowDialog() == DialogResult.OK)
                 {
-                    var contents = reader.ReadToEnd();
-                    Console.WriteLine(DecriptText(contents));
+                    string fileName = openDialog.FileName;
+
+                    using (var file = new FileStream(fileName, FileMode.Open))
+                    using (var reader = new StreamReader(file))
+                    {
+                        var contents = reader.ReadToEnd();
+                        Console.OutputEncoding = System.Text.Encoding.UTF8;
+                        Console.WriteLine(DecryptText(contents));
+                    }
                 }
             }
         }
 
-        static string DecriptText(string text) => CypherText(text, 1, 3);
+        static string DecryptText(string text) => CypherText(text, 1, 3);
 
-        static string EncriptText(string text) => CypherText(text, -1, -3);
+        static string EncriyptText(string text) => CypherText(text, -1, -3);
 
         static string CypherText(string text, int shift, int maxLength)
         {
@@ -78,13 +82,6 @@ namespace Lab1
             return resultText.ToString();
         }
 
-        static string GetAlphabet(string input)
-        {
-            if (AlphabetCyrillic.IndexOf(input[0]) != -1)
-                return AlphabetCyrillic;
-            return AlphabetLatin;
-        }
-
         static char GetLetterWithShift(char c, string alphabet, int shift)
         {
             var encriptedIndex = alphabet.IndexOf(c);
@@ -96,6 +93,13 @@ namespace Lab1
             if (decriptedIndex < 0)
                 decriptedIndex = alphabet.Length + decriptedIndex;
             return alphabet[decriptedIndex];
+        }
+
+        static string GetAlphabet(string input)
+        {
+            if (AlphabetCyrillic.IndexOf(input[0]) != -1)
+                return AlphabetCyrillic;
+            return AlphabetLatin;
         }
 
         static string AlphabetCyrillic { get; } = "абвгґдеєжзиіїйклмнопрстуфхцшщьюяАБВГҐДЕЄЖЗИІЇЙКЛМНОПРСТУФХЦШЩЬЮЯ";
