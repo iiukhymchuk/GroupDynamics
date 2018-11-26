@@ -31,7 +31,7 @@ namespace Lab1
                     {
                         var contents = reader.ReadToEnd();
                         var encripted = EncriyptText(contents);
-                        Console.OutputEncoding = System.Text.Encoding.UTF8;
+                        Console.OutputEncoding = Encoding.UTF8;
                         Console.WriteLine(encripted);
                         using (var saveDialog = new SaveFileDialog { Title = "Save encript file", Filter = txtFilter })
                         {
@@ -58,7 +58,7 @@ namespace Lab1
                     using (var reader = new StreamReader(file))
                     {
                         var contents = reader.ReadToEnd();
-                        Console.OutputEncoding = System.Text.Encoding.UTF8;
+                        Console.OutputEncoding = Encoding.UTF8;
                         Console.WriteLine(DecryptText(contents));
                     }
                 }
@@ -102,7 +102,7 @@ namespace Lab1
             return AlphabetLatin;
         }
 
-        static string AlphabetCyrillic { get; } = "абвгґдеєжзиіїйклмнопрстуфхцшщьюяАБВГҐДЕЄЖЗИІЇЙКЛМНОПРСТУФХЦШЩЬЮЯ";
+        static string AlphabetCyrillic { get; } = "абвгґдеєжзиіїйклмнопрстуфхцчшщьюяАБВГҐДЕЄЖЗИІЇЙКЛМНОПРСТУФХЦЧШЩЬЮЯ";
         static string AlphabetLatin { get; } = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
     }
 }
