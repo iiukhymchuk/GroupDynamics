@@ -1,7 +1,6 @@
 ﻿using System;
-using System.IO;
 using System.Text;
-using System.Windows.Forms;
+using Utilities;
 
 namespace Lab2
 {
@@ -20,54 +19,30 @@ namespace Lab2
 
         static void Encrypt()
         {
-            using (var openDialog = new OpenFileDialog { Multiselect = false, Title = "Select file to encript", Filter = txtFilter })
-            {
-                if (openDialog.ShowDialog() == DialogResult.OK)
-                {
-                    var fileName = openDialog.FileName;
+            string textToEncrypt = FileHelpers.ReadFile("Select file to encript");
 
-                    using (var file = new FileStream(fileName, FileMode.Open))
-                    using (var reader = new StreamReader(file))
-                    {
-                        var contents = reader.ReadToEnd();
-                        var encripted = EncriyptText(contents);
-                        Console.OutputEncoding = Encoding.UTF8;
-                        Console.WriteLine(encripted);
-                        using (var saveDialog = new SaveFileDialog { Title = "Save encript file", Filter = txtFilter })
-                        {
-                            if (saveDialog.ShowDialog() == DialogResult.OK)
-                            {
-                                var fileToSaveName = saveDialog.FileName;
-                                File.WriteAllText(fileToSaveName, encripted);
-                            }
-                        }
-                    }
-                }
-            }
+            if (textToEncrypt is null)
+                return;
+
+            var encrypted = EncryptText(textToEncrypt);
+
+            Console.OutputEncoding = Encoding.UTF8;
+            Console.WriteLine(encrypted);
+
+            FileHelpers.SaveFile(encrypted, "Save encripted file");
         }
 
         static void Decrypt()
         {
-            using (var openDialog = new OpenFileDialog { Multiselect = false, Title = "Select encripted file", Filter = txtFilter })
-            {
-                if (openDialog.ShowDialog() == DialogResult.OK)
-                {
-                    string fileName = openDialog.FileName;
+            string textToDecrypt = FileHelpers.ReadFile("Select encripted file");
 
-                    using (var file = new FileStream(fileName, FileMode.Open))
-                    using (var reader = new StreamReader(file))
-                    {
-                        var contents = reader.ReadToEnd();
-                        Console.OutputEncoding = Encoding.UTF8;
-                        Console.WriteLine(DecryptText(contents));
-                    }
-                }
-            }
+            Console.OutputEncoding = Encoding.UTF8;
+            Console.WriteLine(DecryptText(textToDecrypt));
         }
 
         static string DecryptText(string text) => CypherText(text, 1, 3);
 
-        static string EncriyptText(string text) => CypherText(text, -1, -3);
+        static string EncryptText(string text) => CypherText(text, -1, -3);
 
         static string CypherText(string text, int shift, int maxLength)
         {
@@ -97,12 +72,9 @@ namespace Lab2
 
         static string GetAlphabet(string input)
         {
-            if (AlphabetCyrillic.IndexOf(input[0]) != -1)
-                return AlphabetCyrillic;
-            return AlphabetLatin;
+            if (Globals.CyrillicAlphabet.IndexOf(input[0]) != -1)
+                return Globals.CyrillicAlphabet;
+            return Globals.LatinAlphabet;
         }
-
-        static string AlphabetCyrillic { get; } = "абвгґдеєжзиіїйклмнопрстуфхцчшщьюяАБВГҐДЕЄЖЗИІЇЙКЛМНОПРСТУФХЦЧШЩЬЮЯ";
-        static string AlphabetLatin { get; } = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
     }
 }
