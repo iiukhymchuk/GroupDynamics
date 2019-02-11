@@ -4,10 +4,10 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{1BC42C71-87B3-4BC3-81B7-347A50837B9D}</ProjectGuid>
+    <ProjectGuid>{B3035C59-48D0-42FD-A069-1BBBFBB03C2A}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>Lab1</RootNamespace>
-    <AssemblyName>Lab1</AssemblyName>
+    <RootNamespace>Lab3</RootNamespace>
+    <AssemblyName>Lab3</AssemblyName>
     <TargetFrameworkVersion>v4.7</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -35,7 +35,6 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />

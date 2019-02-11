@@ -3,7 +3,7 @@ using System.IO;
 using System.Text;
 using System.Windows.Forms;
 
-namespace Lab1
+namespace Lab2
 {
     class Program
     {
